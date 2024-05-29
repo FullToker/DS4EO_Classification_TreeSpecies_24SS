@@ -22,7 +22,7 @@ First 10 species from all EU forests dataset(EU_forest.csv, EU_withcountry.csv w
 1. Load.py: The init File_geojson Class;
 2. read_file.py: Using Pandas to deal with the duplicate and filtering accoding to countries or Specie Name;
 
-## Folder Test
+## Folder "Test"
 Various Test datasets for our model, not final dataset we will use. 
 
 # 29.05.2024
