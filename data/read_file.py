@@ -16,6 +16,8 @@ species = [
     "Carpinus betulus",
 ]
 
+contry = []
+
 
 filtered_df = data[data["SPECIES NAME"].isin(species)]
 filtered_df.to_csv("EU_10species.csv", index=False)
