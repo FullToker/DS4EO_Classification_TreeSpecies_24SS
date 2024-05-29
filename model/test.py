@@ -24,10 +24,8 @@ label_dict = {
     8: "Sorbus aucuparia",
     9: "Carpinus betulus",
 }
-
 data_path = [
-    ("../data/Dataset/test/all_trees/" + x + "_0529.geojson")
-    for _, x in label_dict.items()
+    ("../data/test/all_trees/" + x + "_0529.geojson") for _, x in label_dict.items()
 ]
 
 # all classes
