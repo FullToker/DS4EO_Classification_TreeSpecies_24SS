@@ -170,7 +170,8 @@ class Feature:
         reduced = []
         for i in range(self.filledImgs.shape[0]):
             band_img = self.filledImgs[i]
-            band_img_reduced = pca.fit_transform(band_img)
+            pca.fit(band_img.reshape(1, -1))
+            band_img_reduced = pca.transform(band_img.reshape(1, -1))
             reduced.append(band_img_reduced)
         self.pcaFeatures = np.concatenate(reduced)
 
