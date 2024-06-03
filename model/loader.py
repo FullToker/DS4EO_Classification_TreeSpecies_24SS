@@ -23,7 +23,7 @@ class File_geojson:
             )
 
         # label
-        pattern = r"(?<=\/)([^\/]+)(?=_0529)"
+        pattern = r"(?<=\/)([^\/]+)(?=_0528)"
         self.name = re.search(pattern, path).group(0)
         label = [key for key, value in label_dict.items() if value == self.name][0]
         self.labels = np.array([label] * self.num)
@@ -80,9 +80,12 @@ class File_geojson:
         feature_imgs = []
         for i in range(self.num):
             feature = self.all_features[i]
-            each_imgs = self.process_data(feature)
-            # if len(each_imgs) != len(self.bands) * 25:
-            #    print(f"第{i}个feature的大小不对")
+            # using old method: all features
+            # each_imgs = self.process_data(feature)
+
+            # using  PCA Features to SFFS
+            pca_features = Feature(feature)
+            each_imgs = pca_features.__getPCA__()
             feature_imgs.append(each_imgs)
 
         # get all flatten imgs in one class array(num, 750)
@@ -178,4 +181,5 @@ class Feature:
         return self.filledImgs.shape
 
     def __getPCA__(self):
+        self.reduce_dimen()
         return self.pcaFeatures
