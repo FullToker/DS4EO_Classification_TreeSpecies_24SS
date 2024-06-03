@@ -3,6 +3,7 @@ import numpy as np
 import re
 import json
 from geojson import FeatureCollection
+from sklearn.decomposition import PCA
 
 
 class File_geojson:
@@ -88,7 +89,8 @@ class File_geojson:
         self.newdata = np.stack(feature_imgs)
         assert self.newdata.shape == (
             self.num,
-            len(self.bands) * 25,
+            len(self.bands)
+            * 3,  # if there is no PCA: * 25, otherwise: * PCA's n_components
         ), "the shape of final data is not correct, != (num, 750)"
 
         return self.newdata
@@ -116,4 +118,64 @@ class File_geojson:
 
 class Feature:
     def __init__(self, feature: dict):
-        pass
+        self.feature = feature
+        self.pcaFeatures = []
+        self.bands = [
+            "B2",
+            "B3",
+            "B4",
+            "B5",
+            "B6",
+            "B7",
+            "B8",
+            "B8A",
+            "B11",
+            "B12",
+            "B2_1",
+            "B3_1",
+            "B4_1",
+            "B5_1",
+            "B6_1",
+            "B7_1",
+            "B8_1",
+            "B8A_1",
+            "B11_1",
+            "B12_1",
+            "B2_2",
+            "B3_2",
+            "B4_2",
+            "B5_2",
+            "B6_2",
+            "B7_2",
+            "B8_2",
+            "B8A_2",
+            "B11_2",
+            "B12_2",
+        ]
+        flatten_data = []
+        # deal with "null":
+        for band in self.bands:
+            img = feature[band]
+            if type(img) == type(None):
+                img = np.zeros((5, 5))
+            flatten_data.append(np.array(img).reshape(-1))
+        self.filledImgs = np.concatenate(flatten_data)
+
+    # reduce the dimension of each img: from 25 to 3 or 2
+    def reduce_dimen(self):
+        pca = PCA(n_components=3)
+        reduced = []
+        for i in range(self.filledImgs.shape[0]):
+            band_img = self.filledImgs[i]
+            band_img_reduced = pca.fit_transform(band_img)
+            reduced.append(band_img_reduced)
+        self.pcaFeatures = np.concatenate(reduced)
+
+    def __getFeature__(self):
+        return self.feature
+
+    def __getImgsShape__(self):
+        return self.filledImgs.shape
+
+    def __getPCA__(self):
+        return self.pcaFeatures
