@@ -94,7 +94,7 @@ class File_geojson:
         assert self.newdata.shape == (
             self.num,
             len(self.bands)
-            * 3,  # if there is no PCA: * 25, otherwise: * PCA's n_components
+            * 25,  # if there is no PCA: * 25, otherwise: * PCA's n_components
         ), "the shape of final data is not correct, != (num, 750)"
 
         return self.newdata
