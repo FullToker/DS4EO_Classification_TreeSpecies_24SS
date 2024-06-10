@@ -1,9 +1,16 @@
 from loader import Feature, File_geojson
+import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SequentialFeatureSelector as SFS
+from sklearn.feature_selection import RFE, RFECV, SelectKBest
 from sklearn.ensemble import RandomForestClassifier as RF
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import confusion_matrix
 
 label_dict = {
     0: "Picea abies",
@@ -52,7 +59,64 @@ print(pca_X.shape)
 
 
 # SFFS
-rf = RF(n_estimators=100)
-sfs = SFS(rf, n_features_to_select=3, cv=5, n_jobs=-1)
+select_func = SVC(gamma=2, C=1)
+sfs = SFS(select_func, n_features_to_select=10, cv=5, n_jobs=-1)
 sfs.fit(pca_X, y)
 print(sfs.get_support())
+new_X = sfs.transform(pca_X)
+
+X_train, X_val, y_train, y_val = train_test_split(
+    new_X, y, test_size=0.2, random_state=42
+)
+print(f"X_train Shape: {X_train.shape}")
+print(f"y_train : {y_train.shape}")
+
+
+plt.figure(figsize=(10, 7))
+plt.subplot(1, 2, 1)
+scatter = plt.scatter(
+    X_train[:, 0],
+    X_train[:, 1],
+    label=y_train[:],
+    c=y_train,
+    cmap=plt.cm.get_cmap("tab10", 10),
+    alpha=0.5,
+)
+plt.colorbar(scatter, label="Label")
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+plt.subplot(1, 2, 2)
+scatter = plt.scatter(
+    X_train[:, 2],
+    X_train[:, 3],
+    label=y_train[:],
+    c=y_train,
+    cmap=plt.cm.get_cmap("tab10", 10),
+    alpha=0.5,
+)
+plt.colorbar(scatter, label="Label")
+plt.xlabel("Principal Component 3")
+plt.ylabel("Principal Component 4")
+plt.show()
+
+classifiers = {
+    # "1KNN": KNeighborsClassifier(n_neighbors=1),
+    # "3KNN": KNeighborsClassifier(n_neighbors=3),
+    "5KNN": KNeighborsClassifier(n_neighbors=5),
+    "NB": GaussianNB(),
+    "RF": RF(n_estimators=100),
+    "MLP": MLPClassifier(alpha=1, max_iter=1000, activation="relu"),
+    # "SVM": SVC(),
+    "newSVC": SVC(gamma=2, C=1),
+}
+
+y__ = dict()
+accuracy = dict()
+print("accuracy of each classifiers is:")
+for clf_name, clf in classifiers.items():
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_val)
+    y__[clf_name] = y_pred
+    acc = np.sum(y__[clf_name] == y_val) / len(y_pred)
+    print(f"{clf_name: >15}: {100*acc:.2f}%")
+print("done")
