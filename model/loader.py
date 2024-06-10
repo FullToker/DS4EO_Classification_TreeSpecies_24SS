@@ -81,11 +81,12 @@ class File_geojson:
         for i in range(self.num):
             feature = self.all_features[i]
             # using old method: all features
-            # each_imgs = self.process_data(feature)
+            each_imgs = self.process_data(feature)
 
             # using  PCA Features to SFFS
-            pca_features = Feature(feature)
-            each_imgs = pca_features.__getPCA__()
+            # pca_features = Feature(feature)
+            # each_imgs = pca_features.__getPCA__()
+
             feature_imgs.append(each_imgs)
 
         # get all flatten imgs in one class array(num, 750)
