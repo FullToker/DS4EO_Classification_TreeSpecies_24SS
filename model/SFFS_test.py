@@ -1,16 +1,18 @@
+from math import gamma
 from loader import Feature, File_geojson
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SequentialFeatureSelector as SFS
-from sklearn.feature_selection import RFE, RFECV, SelectKBest
+from sklearn.feature_selection import RFECV, SelectKBest
 from sklearn.ensemble import RandomForestClassifier as RF
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix
+import seaborn as sns
 
 label_dict = {
     0: "Picea abies",
@@ -34,7 +36,7 @@ for i in range(len(label_dict)):
     treeclass = File_geojson(data_path[i], label_dict)
     imgs.append(treeclass.get_finaldata())
     labels.append(treeclass.get_labels())
-    # print(treeclass.get_feature_num())
+    print(f"{treeclass.get_name()} : {treeclass.get_feature_num()}")
 
 
 #
@@ -57,13 +59,24 @@ pca_bands = np.stack(pca_bands, axis=1)
 pca_X = pca_bands.reshape((len(pca_bands), -1))
 print(pca_X.shape)
 
-
-# SFFS
+# Feature Selection ------------------------------------------//////////
 select_func = SVC(gamma=2, C=1)
-sfs = SFS(select_func, n_features_to_select=10, cv=5, n_jobs=-1)
+# select_func = RF(n_estimators=100)
+# SFFS
+sfs = SFS(select_func, n_features_to_select=15, cv=5, n_jobs=-1)
 sfs.fit(pca_X, y)
 print(sfs.get_support())
+np.save("features_sfs_svm15.npy", sfs.get_support())
 new_X = sfs.transform(pca_X)
+
+# RFECV
+"""
+rfe = RFECV(select_func, n_jobs=-1, cv=5, min_features_to_select=15)
+rfe.fit(pca_X, y)
+print(rfe.get_support())
+new_X = rfe.transform(pca_X)
+"""
+
 
 X_train, X_val, y_train, y_val = train_test_split(
     new_X, y, test_size=0.2, random_state=42
@@ -119,4 +132,19 @@ for clf_name, clf in classifiers.items():
     y__[clf_name] = y_pred
     acc = np.sum(y__[clf_name] == y_val) / len(y_pred)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+# plot the confusion matrix of the SVM Classifier
+plot_model = SVC(gamma=2, C=1)
+plot_model.fit(X_train, y_train)
+y_pred = plot_model.predict(X_val)
+cm = confusion_matrix(y_val, y_pred)
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=True)
+plt.xlabel("Predicted label")
+plt.ylabel("Ground Truth")
+plt.title("Confusion Matrix for SVM")
+plt.show()
+
+
 print("done")
