@@ -51,4 +51,8 @@ Use data Argumentation to make datasets more homogenous?
 
 # 12.06.2024
 ## Feature Selection
+1. confusion matrix of the SVM based on 15 selected features
 
+## Goal
+1. Data Argumentation
+2. Research on confusion matrix
