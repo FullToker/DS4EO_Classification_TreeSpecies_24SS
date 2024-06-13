@@ -26,7 +26,7 @@ label_dict = {
     8: "Sorbus aucuparia",
     9: "Carpinus betulus",
 }
-data_path = [("./data/test/" + x + "_0528.geojson") for _, x in label_dict.items()]
+data_path = [("../data/test/" + x + "_0528.geojson") for _, x in label_dict.items()]
 
 # all classes
 imgs = []
@@ -39,7 +39,6 @@ for i in range(len(label_dict)):
     print(f"{treeclass.get_name()} : {treeclass.get_feature_num()}")
 
 
-#
 X = np.concatenate(imgs, axis=0)
 y = np.concatenate(labels, axis=0)
 print(f"X Shape: {X.shape}")
@@ -60,13 +59,13 @@ pca_X = pca_bands.reshape((len(pca_bands), -1))
 print(pca_X.shape)
 
 # Feature Selection ------------------------------------------//////////
-select_func = SVC(gamma=2, C=1)
-# select_func = RF(n_estimators=100)
+# select_func = SVC(gamma=2, C=1)
+select_func = RF(n_estimators=100)
 # SFFS
 sfs = SFS(select_func, n_features_to_select=15, cv=5, n_jobs=-1)
 sfs.fit(pca_X, y)
 print(sfs.get_support())
-np.save("features_sfs_svm15.npy", sfs.get_support())
+np.save("./feature_selection/features_sfs_rf15.npy", sfs.get_support())
 new_X = sfs.transform(pca_X)
 
 # RFECV
@@ -118,7 +117,7 @@ classifiers = {
     "5KNN": KNeighborsClassifier(n_neighbors=5),
     "NB": GaussianNB(),
     "RF": RF(n_estimators=100),
-    "MLP": MLPClassifier(alpha=1, max_iter=1000, activation="relu"),
+    "MLP": MLPClassifier(alpha=1, max_iter=2000, activation="relu"),
     # "SVM": SVC(),
     "newSVC": SVC(gamma=2, C=1),
 }

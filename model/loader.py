@@ -103,6 +103,12 @@ class File_geojson:
     def get_name(self):
         return self.name
 
+    # get specific feature imgs
+    def get_featureImgs_index(self, index: int):
+        fea = self.all_features[index]
+        imgs = self.process_data(fea)
+        return imgs
+
     # get specific feature accoding to index
     def get_feature_index(self, index: int):
         feature = self.all_features[index]
