@@ -3,8 +3,14 @@ from loader import File_geojson
 from sklearn.decomposition import KernelPCA, PCA
 import matplotlib.pyplot as plt
 
+"""
 X = np.load("./model/data/X_augm.npy")
 y = np.load("./model/data/y_augm.npy")
+"""
+
+## all trees
+X = np.load("../Dataset/all_X.npy")
+y = np.load("./Dataset/all_y.npy")
 
 X_test = np.load("./test/my_patches.npy")
 y_test = np.load("./test/my_labels.npy")
