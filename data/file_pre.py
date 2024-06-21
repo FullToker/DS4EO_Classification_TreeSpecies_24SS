@@ -23,11 +23,10 @@ filtered_df = data[data["SPECIES NAME"].isin(species)]
 filtered_df.to_csv("EU_10species.csv", index=False)
 """
 
-
-unique_df = data.drop_duplicates(subset=["X", "Y"], keep=False)
-filtered_df = unique_df[unique_df["SPECIES NAME"].isin(species)]
-print(filtered_df)
-filtered_df.to_csv("10_strict_norepeat.csv", index=False)
+filtered_df = data[data["SPECIES NAME"].isin(species)]
+unique_df = filtered_df.drop_duplicates(subset=["X", "Y"], keep=False)
+print(unique_df)
+unique_df.to_csv("10_strict_norepeat.csv", index=False)
 
 
 """
