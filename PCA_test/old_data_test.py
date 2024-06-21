@@ -46,7 +46,7 @@ print(f"pca_test's shape: {pca_test.shape}")
 
 # Feature Selection ------------------------------------------//////////
 # support = np.load("./model/feature_selection/features_sfs_svm15.npy")
-select_func = RF(n_estimators=100)
+select_func = RF(n_estimators=100, n_jobs = -1)
 # SFFS
 sfs = SFS(select_func, n_features_to_select=30, cv=5, n_jobs=-1)
 sfs.fit(pca_X, y)
