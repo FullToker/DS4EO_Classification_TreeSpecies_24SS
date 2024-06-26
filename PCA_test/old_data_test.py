@@ -44,6 +44,7 @@ pca_test = np.stack(pca_test_bands, axis=-1)  # for test data's sffs
 pca_test = pca_test.reshape((len(pca_test), -1))
 print(f"pca_test's shape: {pca_test.shape}")
 
+"""
 # Feature Selection ------------------------------------------//////////
 # support = np.load("./model/feature_selection/features_sfs_svm15.npy")
 select_func = RF(n_estimators=100, n_jobs = -1)
@@ -53,6 +54,9 @@ sfs.fit(pca_X, y)
 print(sfs.get_support())
 np.save("./model/feature_selection/features_sfs_rf25_olddata.npy", sfs.get_support())
 support = sfs.get_support()
+"""
+
+support = np.load("./model/feature_selection/features_sfs_rf25_olddata.npy")
 
 
 X = pca_X[:, support]
