@@ -41,6 +41,9 @@ X = np.concatenate(imgs, axis=0)
 y = np.concatenate(labels, axis=0)
 print(f"X Shape: {X.shape}")
 print(f"y Shape: {y.shape}")
+np.save("./data/np_data/X_ndvi.npy", X)
+np.save("./data/np_data/y_ndvi.npy", y)
+
 
 # counts = np.bincount(y)
 # for i, count in enumerate(counts):

@@ -3,13 +3,17 @@ import torch.nn as nn
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_size=5 * 5 * 30):
+    def __init__(self, input_size=5 * 5 * 33):
         super().__init__()
 
         self.encoder = nn.Sequential(
-            nn.Conv2d(30, 64, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(33, 64, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(64, 32, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(64, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(32, 16, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(16, 4, kernel_size=3, padding=1),
             nn.ReLU(),
         )
 
@@ -18,17 +22,17 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, output_size=28 * 28):
+    def __init__(self, output_size=5 * 5 * 33):
         super().__init__()
 
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(
-                32, 16, kernel_size=3, stride=2, padding=1, output_padding=1
-            ),
+            nn.ConvTranspose2d(4, 16, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.ConvTranspose2d(
-                16, 30, kernel_size=3, stride=2, padding=1, output_padding=1
-            ),
+            nn.ConvTranspose2d(16, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.ConvTranspose2d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 33, kernel_size=3, padding=1),
             nn.Sigmoid(),
         )
 
