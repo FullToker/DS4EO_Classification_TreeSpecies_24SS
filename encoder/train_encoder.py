@@ -5,7 +5,6 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import matplotlib.pyplot as plt
 from autoencoder import AutoEncoder, Encoder, Decoder
-from copy import deepcopy
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("You are using the following device: ", device)
@@ -23,6 +22,9 @@ train_data, test_data = random_split(
 )
 print(f"shape of train : {len(train_data)}")
 print(f"shape of test : {len(test_data)}")
+torch.save(train_data, "./encoder/save/train.pth")
+torch.save(test_data, "./encoder/save/test.pth")
+
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
 
@@ -37,6 +39,12 @@ for epoch in range(epochs):
         loss = autoencoder.train_step(batch)
         total_loss += loss.item()
     print(f"the epoch {epoch + 1}/{epochs} loss: {total_loss}")
+
+
+encoder_path = "./encoder/save/encoder.pth"
+autoencoder_path = "./encoder/save/autoencoder.pth"
+torch.save(encoder.state_dict(), encoder_path)
+torch.save(autoencoder.state_dict(), autoencoder_path)
 
 loss = 0
 for batch in test_loader:
