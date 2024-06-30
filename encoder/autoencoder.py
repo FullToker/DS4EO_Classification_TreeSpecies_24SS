@@ -15,8 +15,6 @@ class Encoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(16, 4, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(4, 2, kernel_size=3),
-            nn.ReLU(),
         )
 
     def forward(self, x):
@@ -28,8 +26,6 @@ class Decoder(nn.Module):
         super().__init__()
 
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(2, 4, kernel_size=3),
-            nn.ReLU(),
             nn.ConvTranspose2d(4, 16, kernel_size=3, padding=1),
             nn.ReLU(),
             nn.ConvTranspose2d(16, 32, kernel_size=3, padding=1),
