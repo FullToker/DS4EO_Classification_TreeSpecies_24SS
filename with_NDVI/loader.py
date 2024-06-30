@@ -77,6 +77,7 @@ class File_geojson:
         # we want to add NDVI band for each season
         season = int(len(self.bands) / 10)
         assert season == 3, "the number of bands cannot devide by 10"
+        self.num_newband = 3
         for i in range(season):
             img = np.zeros((5, 5))
             img = np.array(img).reshape(-1)
@@ -85,7 +86,14 @@ class File_geojson:
             ndvi = (flatten_data[7 + i * 10] - flatten_data[2 + i * 10]) / (
                 flatten_data[7 + i * 10] + flatten_data[2 + i * 10] + 1e-9
             )
-            flatten_data.append(img)
+
+            # calculate the Chlorophyll Index (CI)
+            ci = (flatten_data[3 + i * 10] - flatten_data[4 + i * 10]) / (
+                flatten_data[3 + i * 10] + flatten_data[4 + i * 10] + 1e-9
+            )
+
+            # append
+            flatten_data.append(ci)
 
         all_imgs = np.concatenate(flatten_data)
         return all_imgs
@@ -107,7 +115,7 @@ class File_geojson:
         self.newdata = np.stack(feature_imgs)
         assert self.newdata.shape == (
             self.num,
-            len(self.bands) * 25 + 3 * 25,
+            len(self.bands) * 25 + self.num_newband * 25,
         ), "the shape of final data is not correct, != (num, 750)"
 
         return self.newdata
