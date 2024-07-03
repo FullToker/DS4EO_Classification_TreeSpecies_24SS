@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_size=5 * 5 * 33):
+    def __init__(self, input_size=5 * 5 * 33, latent=25):
         super().__init__()
 
         self.encoder = nn.Sequential(
@@ -13,21 +13,23 @@ class Encoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(32, 16, kernel_size=3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(16, 4, kernel_size=3, padding=1),
-            nn.ReLU(),
         )
+        self.fc = nn.Linear(5 * 5 * 16, latent)
 
     def forward(self, x):
-        return self.encoder(x)
+        x = self.encoder(x)
+        reshape = nn.Flatten()
+        x = reshape(x)
+        x = self.fc(x)
+        return x
 
 
 class Decoder(nn.Module):
-    def __init__(self, output_size=5 * 5 * 33):
+    def __init__(self, output_size=5 * 5 * 33, latent=25):
         super().__init__()
 
+        self.fc = nn.Linear(latent, 5 * 5 * 16)
         self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(4, 16, kernel_size=3, padding=1),
-            nn.ReLU(),
             nn.ConvTranspose2d(16, 32, kernel_size=3, padding=1),
             nn.ReLU(),
             nn.ConvTranspose2d(32, 64, kernel_size=3, padding=1),
@@ -37,6 +39,9 @@ class Decoder(nn.Module):
         )
 
     def forward(self, x):
+        x = self.fc(x)
+        reshape = nn.Unflatten(1, (16, 5, 5))
+        x = reshape(x)
         return self.decoder(x)
 
 
