@@ -28,9 +28,9 @@ torch.save(test_data, "./encoder/save/test.pth")
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
 
-encoder = Encoder()
+encoder = Encoder().to(device)
 decoder = Decoder().to(device)
-autoencoder = AutoEncoder(encoder, decoder, batch_size)
+autoencoder = AutoEncoder(encoder, decoder, batch_size).to(device)
 
 epochs = 30
 for epoch in range(epochs):
@@ -49,6 +49,7 @@ torch.save(autoencoder.state_dict(), autoencoder_path)
 loss = 0
 for batch in test_loader:
     images, labels = batch
+    images, labels = images.to(device), labels.to(device)
     reconstruction = autoencoder.forward(images)
     func = nn.MSELoss()
     loss += func(reconstruction, images).item()

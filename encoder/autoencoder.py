@@ -8,19 +8,19 @@ class Encoder(nn.Module):
 
         self.encoder = nn.Sequential(
             nn.Conv2d(33, 64, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Conv2d(64, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Conv2d(32, 16, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.LeakyReLU(),
         )
         self.fc = nn.Linear(5 * 5 * 16, latent)
 
     def forward(self, x):
         x = self.encoder(x)
-        reshape = nn.Flatten()
-        x = reshape(x)
-        x = self.fc(x)
+        # reshape = nn.Flatten()
+        # x = reshape(x)
+        # x = self.fc(x)
         return x
 
 
@@ -31,17 +31,17 @@ class Decoder(nn.Module):
         self.fc = nn.Linear(latent, 5 * 5 * 16)
         self.decoder = nn.Sequential(
             nn.ConvTranspose2d(16, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.ConvTranspose2d(32, 64, kernel_size=3, padding=1),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.ConvTranspose2d(64, 33, kernel_size=3, padding=1),
             nn.Sigmoid(),
         )
 
     def forward(self, x):
-        x = self.fc(x)
-        reshape = nn.Unflatten(1, (16, 5, 5))
-        x = reshape(x)
+        # x = self.fc(x)
+        # reshape = nn.Unflatten(1, (16, 5, 5))
+        # x = reshape(x)
         return self.decoder(x)
 
 

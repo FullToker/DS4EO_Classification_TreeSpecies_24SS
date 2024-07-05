@@ -20,3 +20,22 @@ for data in train_loader:
     data = data.to(device)
 for data in test_loader:
     data = data.to(device)
+
+
+# the classifier class
+class clf(nn.Module):
+    def __init__(self, encoded):
+        super().__init__()
+        self.device = torch.device(
+            "mps" if torch.backends.mps.is_available() else "cpu"
+        )
+
+        self.model = nn.Sequential(
+            nn.Linear(encoded, 128),
+            nn.LeakyReLU(),
+            nn.Linear(128, 10),
+            nn.Softmax(),
+        )
+
+    def forward(self, x):
+        return self.model(x)
