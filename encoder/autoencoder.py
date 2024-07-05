@@ -63,9 +63,6 @@ class AutoEncoder(nn.Module):
         reconstruction = self.decoder.forward(latent)
         return reconstruction
 
-    def set_optimizer(self):
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
-
     def train_step(self, batch, loss_func=nn.MSELoss()):
         images, labels = batch
         images, labels = images.to(self.device), labels.to(self.device)

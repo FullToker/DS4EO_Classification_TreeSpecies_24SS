@@ -11,19 +11,20 @@ print("You are using the following device: ", device)
 
 # load the dataset from NPY ----------------------/////////////////-------------////////
 batch_size = 64
-input = np.load("./data/np_data/X_ndvi.npy")
+input = np.load("./data/np_data/X_ci_augm.npy")
 print(input.shape)
 input = torch.tensor(input.reshape(-1, 33, 5, 5), dtype=torch.float32)
-label = torch.tensor(np.load("./data/np_data/y_ndvi.npy"), dtype=torch.float32)
+label = torch.tensor(np.load("./data/np_data/y_ci_augm.npy"), dtype=torch.float32)
 
+# build the dataset given the unflatten images and label
 dataset = TensorDataset(input, label)
 train_data, test_data = random_split(
-    dataset, [0.85, 0.15], generator=torch.Generator().manual_seed(42)
+    dataset, [0.80, 0.2], generator=torch.Generator().manual_seed(42)
 )
 print(f"shape of train : {len(train_data)}")
 print(f"shape of test : {len(test_data)}")
-torch.save(train_data, "./encoder/save/train.pth")
-torch.save(test_data, "./encoder/save/test.pth")
+torch.save(train_data, "./encoder/save/train_ci.pth")
+torch.save(test_data, "./encoder/save/test_ci.pth")
 
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
@@ -32,7 +33,7 @@ encoder = Encoder().to(device)
 decoder = Decoder().to(device)
 autoencoder = AutoEncoder(encoder, decoder, batch_size).to(device)
 
-epochs = 30
+epochs = 50
 for epoch in range(epochs):
     total_loss = 0
     for batch in train_loader:
