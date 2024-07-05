@@ -56,3 +56,12 @@ Use data Argumentation to make datasets more homogenous?
 ## Goal
 1. Data Argumentation
 2. Research on confusion matrix
+
+# 05.07.2024
+## Autoencoder
+1. fail to add the maxpool and maxUnpool for the encoder
+2. just same with before
+
+## CNN
+1. connect the encoder with classifier
+2. no improvement, most accuracy: 41%
