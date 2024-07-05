@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader, TensorDataset, random_split
 import matplotlib.pyplot as plt
 from autoencoder import AutoEncoder, Encoder, Decoder
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print("You are using the following device: ", device)
 
 # load the dataset from NPY ----------------------/////////////////-------------////////

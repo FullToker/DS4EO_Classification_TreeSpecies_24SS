@@ -1,18 +1,15 @@
 import numpy as np
-from sklearn.base import re
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset, random_split
 import matplotlib.pyplot as plt
 from autoencoder import AutoEncoder, Encoder, Decoder
 from sklearn import tree
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier as RDF
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
-import pandas as pd
 from sklearn.metrics import accuracy_score
 
 encoder = Encoder()

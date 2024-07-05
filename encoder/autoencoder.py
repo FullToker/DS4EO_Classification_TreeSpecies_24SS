@@ -51,7 +51,9 @@ class AutoEncoder(nn.Module):
 
         self.encoder = encoder
         self.decoder = decoder
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "mps" if torch.backends.mps.is_available() else "cpu"
+        )
         self.size = batch_size
 
         self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
