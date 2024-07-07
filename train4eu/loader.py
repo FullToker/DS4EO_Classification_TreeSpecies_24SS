@@ -28,6 +28,10 @@ class File_geojson:
         label = [key for key, value in label_dict.items() if value == self.name][0]
         self.labels = np.array([label] * self.num)
 
+        self.num_newband = 0
+        # record the delete the index
+        self.delete_index = []
+
     def process_data(self, feature):
         # feature is a dict consists of 3 * 10 bands: B2 - B12_2;
         # each band is (5,5) all 25pixels
@@ -68,12 +72,15 @@ class File_geojson:
             img = feature[band]
             # deal with the "null" and "nonetype"(caused by no this band)
             if type(img) == type(None):
-                img = np.zeros((5, 5))
+                # img = np.zeros((5, 5))
+                continue
+
             if len(img) != 5:
-                print(img)
+                # print(img)
                 img = np.zeros((5, 5))
             flatten_data.append(np.array(img).reshape(-1))
 
+        """         
         # we want to add NDVI band for each season
         season = int(len(self.bands) / 10)
         assert season == 3, "the number of bands cannot devide by 10"
@@ -94,6 +101,7 @@ class File_geojson:
 
             # append
             flatten_data.append(ci)
+        """
 
         all_imgs = np.concatenate(flatten_data)
         return all_imgs
@@ -104,19 +112,19 @@ class File_geojson:
             feature = self.all_features[i]
             # using old method: all features
             each_imgs = self.process_data(feature)
-
-            # using  PCA Features to SFFS
-            # pca_features = Feature(feature)
-            # each_imgs = pca_features.__getPCA__()
+            if len(each_imgs) < len(self.bands) * 25:
+                self.delete_index.append(i)
+                continue
 
             feature_imgs.append(each_imgs)
 
         # get all flatten imgs in one class array(num, 750)
         self.newdata = np.stack(feature_imgs)
-        assert self.newdata.shape == (
+        """        assert self.newdata.shape == (
             self.num,
             len(self.bands) * 25 + self.num_newband * 25,
         ), "the shape of final data is not correct, != (num, 750)"
+        """
 
         return self.newdata
 
@@ -139,9 +147,14 @@ class File_geojson:
     def get_feature_num(self):
         return self.num
 
+    # get the deleted null numbers of features
+    def get_real_feature_num(self):
+        return self.num - len(self.delete_index)
+
     # get the labels(np.array)
     def get_labels(self):
-        return self.labels
+        labels = [x for i, x in enumerate(self.labels) if i not in self.delete_index]
+        return labels
 
     def get_bands(self):
         return self.bands
