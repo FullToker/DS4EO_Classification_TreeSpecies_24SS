@@ -72,8 +72,8 @@ class File_geojson:
             img = feature[band]
             # deal with the "null" and "nonetype"(caused by no this band)
             if type(img) == type(None):
-                # img = np.zeros((5, 5))
-                continue
+                img = np.zeros((5, 5))
+                # continue
 
             if len(img) != 5:
                 # print(img)
