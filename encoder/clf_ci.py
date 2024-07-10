@@ -16,10 +16,12 @@ encoder = Encoder()
 encoder.load_state_dict(torch.load("./encoder/save/encoder.pth"))
 
 # load the dataset
-train_data = torch.load("./encoder/save/train_argu.pth")
-test_data = torch.load("./encoder/save/test_argu.pth")
+train_data = torch.load("./encoder/save/train.pth")
+val_data = torch.load("./encoder/save/val.pth")
+test_data = torch.load("./encoder/save/test.pth")
 
 train_loader = DataLoader(train_data, batch_size=64, shuffle=False)
+val_loader = DataLoader(val_data, batch_size=64, shuffle=False)
 test_loader = DataLoader(test_data, batch_size=64, shuffle=False)
 
 X = []
@@ -38,7 +40,7 @@ print(y.shape)
 X_val = []
 y_val = []
 with torch.no_grad():
-    for data, label in test_loader:
+    for data, label in val_loader:
         encoded = encoder.forward(data)
         X_val.append(encoded.view(encoded.size(0), -1).numpy())
         y_val.append(label.numpy())
@@ -46,6 +48,17 @@ with torch.no_grad():
 X_val = np.vstack(X_val)
 y_val = np.hstack(y_val)
 
+# process the test data with encoder
+X_test = []
+y_test = []
+with torch.no_grad():
+    for data, label in test_loader:
+        encoded = encoder.forward(data)
+        X_test.append(encoded.view(encoded.size(0), -1).numpy())
+        y_test.append(label.numpy())
+
+X_test = np.vstack(X_test)
+y_test = np.hstack(y_test)
 
 classifiers = {
     # "1KNN": KNeighborsClassifier(n_neighbors=1),
@@ -59,9 +72,17 @@ classifiers = {
     "newSVC": SVC(gamma=2, C=1),
 }
 
-print("accuracy of each classifiers is:")
+print("accuracy of each classifiers in Val Set is:")
 for clf_name, clf in classifiers.items():
     clf.fit(X, y)
     y_pred = clf.predict(X_val)
     acc = accuracy_score(y_pred, y_val)
+    print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+# eavl using test data
+print("accuracy of each classifiers in Test Set is:")
+for clf_name, clf in classifiers.items():
+    clf.fit(X, y)
+    y_pred = clf.predict(X_test)
+    acc = accuracy_score(y_pred, y_test)
     print(f"{clf_name: >15}: {100*acc:.2f}%")

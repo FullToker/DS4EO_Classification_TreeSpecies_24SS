@@ -62,9 +62,11 @@ classifiers = {
     "newSVC": SVC(gamma=2, C=1),
 }
 
-print("accuracy of each classifiers is:")
+print("accuracy of each classifiers in VAL Set is:")
 for clf_name, clf in classifiers.items():
     clf.fit(X, y)
     y_pred = clf.predict(X_val)
     acc = accuracy_score(y_pred, y_val)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+# build the test loader

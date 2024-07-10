@@ -15,9 +15,7 @@ label_dict = {
     8: "Sorbus aucuparia",
     9: "Carpinus betulus",
 }
-data_path = [
-    ("./data/ksh/test_data/" + x + "_0528.geojson") for _, x in label_dict.items()
-]
+data_path = [("./data/test_data/" + x + "_0528.geojson") for _, x in label_dict.items()]
 
 # all classes
 imgs = []
@@ -35,5 +33,5 @@ X = np.concatenate(imgs, axis=0)
 y = np.concatenate(labels, axis=0)
 print(f"X Shape: {X.shape}")
 print(f"y Shape: {y.shape}")
-np.save("./test_model/data/X_eval.npy", X)
-np.save("./test_model/data/y_eval.npy", y)
+np.save("./test_model/data/X_eval_new.npy", X)
+np.save("./test_model/data/y_eval_new.npy", y)

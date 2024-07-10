@@ -11,23 +11,23 @@ print("You are using the following device: ", device)
 
 # load the dataset from NPY ----------------------/////////////////-------------////////
 batch_size = 64
-input = np.load("./data/np_data/X_ci_augm.npy")
+input = np.load("./test_model/data/X_norm.npy")
 print(input.shape)
-input = torch.tensor(input.reshape(-1, 33, 5, 5), dtype=torch.float32)
-label = torch.tensor(np.load("./data/np_data/y_ci_augm.npy"), dtype=torch.float32)
+input = torch.tensor(input.reshape(-1, 30, 5, 5), dtype=torch.float32)
+label = torch.tensor(np.load("./test_model/data/y_norm.npy"), dtype=torch.float32)
 
 # build the dataset given the unflatten images and label
 dataset = TensorDataset(input, label)
-train_data, test_data = random_split(
+train_data, val_data = random_split(
     dataset, [0.80, 0.2], generator=torch.Generator().manual_seed(42)
 )
 print(f"shape of train : {len(train_data)}")
-print(f"shape of test : {len(test_data)}")
-torch.save(train_data, "./encoder/save/train_ci.pth")
-torch.save(test_data, "./encoder/save/test_ci.pth")
+print(f"shape of test : {len(val_data)}")
+torch.save(train_data, "./encoder/save/train.pth")
+torch.save(val_data, "./encoder/save/val.pth")
 
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
+val_loader = DataLoader(val_data, batch_size=batch_size, shuffle=False)
 
 encoder = Encoder().to(device)
 decoder = Decoder().to(device)
@@ -48,10 +48,20 @@ torch.save(encoder.state_dict(), encoder_path)
 torch.save(autoencoder.state_dict(), autoencoder_path)
 
 loss = 0
-for batch in test_loader:
+for batch in val_loader:
     images, labels = batch
     images, labels = images.to(device), labels.to(device)
     reconstruction = autoencoder.forward(images)
     func = nn.MSELoss()
     loss += func(reconstruction, images).item()
-print(f"loss in test data: {loss}")
+print(f"loss in val data: {loss}")
+
+# load the test
+input = np.load("./test_model/data/X_eval.npy")
+print(input.shape)
+input = torch.tensor(input.reshape(-1, 30, 5, 5), dtype=torch.float32)
+label = torch.tensor(np.load("./test_model/data/y_eval.npy"), dtype=torch.float32)
+
+# build the dataset given the unflatten images and label
+dataset = TensorDataset(input, label)
+torch.save(dataset, "./encoder/save/test.pth")

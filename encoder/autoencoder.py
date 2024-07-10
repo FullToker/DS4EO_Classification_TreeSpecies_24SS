@@ -7,7 +7,7 @@ class Encoder(nn.Module):
         super().__init__()
 
         self.encoder = nn.Sequential(
-            nn.Conv2d(33, 64, kernel_size=3, padding=1),
+            nn.Conv2d(30, 64, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.Conv2d(64, 32, kernel_size=3, padding=1),
             nn.LeakyReLU(),
@@ -34,7 +34,7 @@ class Decoder(nn.Module):
             nn.LeakyReLU(),
             nn.ConvTranspose2d(32, 64, kernel_size=3, padding=1),
             nn.LeakyReLU(),
-            nn.ConvTranspose2d(64, 33, kernel_size=3, padding=1),
+            nn.ConvTranspose2d(64, 30, kernel_size=3, padding=1),
             nn.Sigmoid(),
         )
 

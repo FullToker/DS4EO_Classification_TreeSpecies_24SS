@@ -100,7 +100,7 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-    print(f"Accuracy of the model on the norm images: {100 * correct / total:.2f}%")
+    print(f"Accuracy of the model on the Test images: {100 * correct / total:.2f}%")
 
 
 """
