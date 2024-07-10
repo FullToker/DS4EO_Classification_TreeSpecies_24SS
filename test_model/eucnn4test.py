@@ -105,7 +105,6 @@ with torch.no_grad():
 
 """
 
-
 writer = SummaryWriter("./test_model/runs/norm_800ep_withTest")
 # tensorboard --logdir=runs
 
