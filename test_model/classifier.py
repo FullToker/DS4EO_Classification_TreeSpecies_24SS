@@ -19,16 +19,16 @@ y = np.load("./test_model/data/y_norm.npy")
 print(f"data shape: {X.shape}")
 print(f"label shape: {y.shape}")
 
-X_test = np.load("./old_test/my_patches.npy")
-y_test = np.load("./old_test/my_labels.npy")
+X_test = np.load("./test_model/data/X_eval.npy")
+y_test = np.load("./test_model/data/y_eval.npy")
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
-# pca = PCA(n_components=20)
-pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=5)
+pca = PCA(n_components=25)
+# pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=5)
 
 # reduce dimensions
 pca.fit(X_train)
@@ -49,11 +49,10 @@ classifiers = {
     # "SVM": SVC(),
     "newSVC": SVC(gamma=2, C=1),
 }
-X_test_reduced = pca.fit_transform(X_val)
 
 y__ = dict()
 accuracy = dict()
-print("accuracy of each classifiers is:")
+print("accuracy of each classifiers in Val set is:")
 for clf_name, clf in classifiers.items():
     clf.fit(X_train_reduced, y_train)
     y_pred = clf.predict(X_val_reduced)
@@ -62,3 +61,12 @@ for clf_name, clf in classifiers.items():
     print(f"{clf_name: >15}: {100*acc:.2f}%")
 
 # in test set
+y__ = dict()
+accuracy = dict()
+print("accuracy of each classifiers in Test set is:")
+for clf_name, clf in classifiers.items():
+    clf.fit(X_train_reduced, y_train)
+    y_pred = clf.predict(X_test_reduced)
+    y__[clf_name] = y_pred
+    acc = np.sum(y__[clf_name] == y_test) / len(y_pred)
+    print(f"{clf_name: >15}: {100*acc:.2f}%")

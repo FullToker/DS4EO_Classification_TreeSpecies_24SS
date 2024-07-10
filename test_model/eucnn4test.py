@@ -75,8 +75,8 @@ cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
 cnn_model.to(device)
 
 # load the test
-X_test = np.load("./old_test/my_patches.npy")
-y_test = np.load("./old_test/my_labels.npy")
+X_test = np.load("./test_model/data/X_eval.npy")
+y_test = np.load("./test_model/data/y_eval.npy")
 
 batch_size = 64
 # transfer the array to tensor
