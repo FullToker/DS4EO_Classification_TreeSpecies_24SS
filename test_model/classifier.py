@@ -60,3 +60,5 @@ for clf_name, clf in classifiers.items():
     y__[clf_name] = y_pred
     acc = np.sum(y__[clf_name] == y_val) / len(y_pred)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+# in test set
