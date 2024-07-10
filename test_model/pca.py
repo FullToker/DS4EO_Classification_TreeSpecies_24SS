@@ -2,10 +2,9 @@ import numpy as np
 from sklearn import tree
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.decomposition import PCA, KernelPCA
+from sklearn.decomposition import PCA, KernelPCA, TruncatedSVD
 from sklearn.manifold import TSNE, SpectralEmbedding
 from sklearn.ensemble import RandomForestClassifier as RDF
-from sklearn.ensemble import AdaBoostClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
@@ -29,7 +28,10 @@ print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
 # pca = PCA(n_components=20)
-pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=1)
+# pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=1)
+pca = TruncatedSVD(n_components=25)
+
+# reduce dimensions
 pca.fit(X_train)
 X_train_reduced = pca.transform(X_train)
 X_val_reduced = pca.transform(X_val)
@@ -47,8 +49,8 @@ scatter = plt.scatter(
     alpha=0.5,
 )
 plt.colorbar(scatter, label="Label")
-plt.xlabel("Principal Component 1")
-plt.ylabel("Principal Component 2")
+plt.xlabel("singular vectors 1")
+plt.ylabel("singular vectors 2")
 plt.subplot(1, 2, 2)
 scatter = plt.scatter(
     X_train_reduced[:, 2],
@@ -59,8 +61,8 @@ scatter = plt.scatter(
     alpha=0.5,
 )
 plt.colorbar(scatter, label="Label")
-plt.xlabel("Principal Component 3")
-plt.ylabel("Principal Component 4")
+plt.xlabel("singular vectors 3")
+plt.ylabel("singular vectors 4")
 plt.show()
 
 # draw the testset
