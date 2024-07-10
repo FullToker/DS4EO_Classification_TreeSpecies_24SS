@@ -5,8 +5,8 @@ from torch.utils.data import TensorDataset, DataLoader, random_split
 from torch.utils.tensorboard import SummaryWriter
 
 
-X = np.load("../dataset/X_all_outnull.npy")
-y = np.load("../dataset/y_all_outnull.npy")
+X = np.load("./test_model/data/X_norm_augm.npy")
+y = np.load("./test_model/data/y_norm_augm.npy")
 
 device = torch.device("mps")
 batch_size = 128
@@ -78,7 +78,9 @@ cnn_model = Simple_model().to(device)
 
 print("Begin to train")
 
-writer = SummaryWriter("./train4eu/runs/all_50ep_outnull")
+writer = SummaryWriter("./test_model/runs/norm_50ep_augm")
+# tensorboard --logdir=runs
+
 for epoch in range(num_epoches):
     current_loss = 0.0
 
@@ -106,6 +108,3 @@ for epoch in range(num_epoches):
 
     print(f"Accuracy of the model on the test images: {100 * correct / total:.2f}%")
     writer.add_scalar("Validation Accuracy", 100 * correct / total, epoch)
-
-
-torch.save(cnn_model.state_dict(), "./test_model/data/cnn_eu.pth")
