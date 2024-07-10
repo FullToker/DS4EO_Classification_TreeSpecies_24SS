@@ -19,16 +19,16 @@ y = np.load("./test_model/data/y_norm.npy")
 print(f"data shape: {X.shape}")
 print(f"label shape: {y.shape}")
 
-X_test = np.load("./test_model/data/X_eval.npy")
-y_test = np.load("./test_model/data/y_eval.npy")
+X_test = np.load("./test_model/data/X_eval_new.npy")
+y_test = np.load("./test_model/data/y_eval_new.npy")
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
-pca = PCA(n_components=25)
-# pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=5)
+# pca = PCA(n_components=50)
+pca = KernelPCA(n_jobs=-1, n_components=55, kernel="rbf", gamma=2)
 
 # reduce dimensions
 pca.fit(X_train)

@@ -75,8 +75,8 @@ cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
 cnn_model.to(device)
 
 # load the test
-X_test = np.load("./test_model/data/X_eval.npy")
-y_test = np.load("./test_model/data/y_eval.npy")
+X_test = np.load("./test_model/data/X_eval_new.npy")
+y_test = np.load("./test_model/data/y_eval_new.npy")
 
 batch_size = 64
 # transfer the array to tensor
@@ -92,6 +92,18 @@ correct = 0
 total = 0
 
 with torch.no_grad():
+    for images, labels in val_loader:
+        images, labels = images.to(device), labels.to(device)
+
+        outputs = cnn_model.forward(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+    print(f"Accuracy of the model on the Val Set: {100 * correct / total:.2f}%")
+
+
+with torch.no_grad():
     for images, labels in test_loader:
         images, labels = images.to(device), labels.to(device)
 
@@ -100,7 +112,7 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-    print(f"Accuracy of the model on the Test images: {100 * correct / total:.2f}%")
+    print(f"Accuracy of the model on the Test Set: {100 * correct / total:.2f}%")
 
 
 """
