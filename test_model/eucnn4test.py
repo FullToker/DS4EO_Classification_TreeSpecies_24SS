@@ -5,11 +5,11 @@ from torch.utils.data import TensorDataset, DataLoader, random_split
 from torch.utils.tensorboard import SummaryWriter
 
 
-X = np.load("./test_model/data/X_norm_augm.npy")
-y = np.load("./test_model/data/y_norm_augm.npy")
+X = np.load("./test_model/data/X_norm.npy")
+y = np.load("./test_model/data/y_norm.npy")
 
 device = torch.device("mps")
-batch_size = 128
+batch_size = 64
 
 # transfer the array to tensor
 X = torch.tensor(X.reshape(-1, 30, 5, 5), dtype=torch.float32)
@@ -21,8 +21,8 @@ print(f"num in trian: {len(train_set)}")
 print(f"num in val: {len(val_set)}")
 
 # build the data loader
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False)
-val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True)
 
 
 class Simple_model(nn.Module):
@@ -32,12 +32,7 @@ class Simple_model(nn.Module):
         self.device = torch.device("mps")
 
         self.conv = nn.Sequential(
-            nn.Conv2d(30, 64, kernel_size=3, padding=1),
-            nn.LeakyReLU(),
-            nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
-            nn.Conv2d(64, 32, kernel_size=3, padding=1),
-            nn.LeakyReLU(),
-            nn.Conv2d(32, 16, kernel_size=3, padding=1),
+            nn.Conv2d(30, 16, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.Conv2d(16, 10, kernel_size=1),
             nn.LeakyReLU(),
@@ -73,12 +68,45 @@ class Simple_model(nn.Module):
         return loss
 
 
-num_epoches = 50
-cnn_model = Simple_model().to(device)
+num_epoches = 400
+cnn_model = Simple_model()
+# load the trained data
+cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
+cnn_model.to(device)
+
+# load the test
+X_test = np.load("./old_test/my_patches.npy")
+y_test = np.load("./old_test/my_labels.npy")
+
+batch_size = 64
+# transfer the array to tensor
+X_test = torch.tensor(X_test.reshape(-1, 30, 5, 5), dtype=torch.float32)
+y_test = torch.tensor(y_test, dtype=torch.float32)
+dataset_test = TensorDataset(X_test, y_test)
+print(f"the length of test: {len(X_test)}")
+test_loader = DataLoader(dataset_test, batch_size=batch_size, shuffle=True)
 
 print("Begin to train")
+cnn_model.eval()
+correct = 0
+total = 0
 
-writer = SummaryWriter("./test_model/runs/norm_50ep_augm")
+with torch.no_grad():
+    for images, labels in test_loader:
+        images, labels = images.to(device), labels.to(device)
+
+        outputs = cnn_model.forward(images)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+    print(f"Accuracy of the model on the norm images: {100 * correct / total:.2f}%")
+
+
+"""
+
+
+writer = SummaryWriter("./test_model/runs/norm_800ep_withTest")
 # tensorboard --logdir=runs
 
 for epoch in range(num_epoches):
@@ -106,5 +134,22 @@ for epoch in range(num_epoches):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+    print(f"Accuracy of the model on the val images: {100 * correct / total:.2f}%")
+    writer.add_scalar("Validation Accuracy", 100 * correct / total, epoch)
+
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+
+            outputs = cnn_model.forward(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
     print(f"Accuracy of the model on the test images: {100 * correct / total:.2f}%")
     writer.add_scalar("Validation Accuracy", 100 * correct / total, epoch)
+
+
+"""

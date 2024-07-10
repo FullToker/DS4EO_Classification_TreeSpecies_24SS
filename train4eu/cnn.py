@@ -32,12 +32,7 @@ class Simple_model(nn.Module):
         self.device = torch.device("mps")
 
         self.conv = nn.Sequential(
-            nn.Conv2d(30, 64, kernel_size=3, padding=1),
-            nn.LeakyReLU(),
-            nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
-            nn.Conv2d(64, 32, kernel_size=3, padding=1),
-            nn.LeakyReLU(),
-            nn.Conv2d(32, 16, kernel_size=3, padding=1),
+            nn.Conv2d(30, 16, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.Conv2d(16, 10, kernel_size=1),
             nn.LeakyReLU(),
@@ -73,12 +68,12 @@ class Simple_model(nn.Module):
         return loss
 
 
-num_epoches = 50
+num_epoches = 200
 cnn_model = Simple_model().to(device)
 
 print("Begin to train")
 
-writer = SummaryWriter("./train4eu/runs/all_50ep_outnull")
+writer = SummaryWriter("./train4eu/runs/all_200ep_outnull")
 for epoch in range(num_epoches):
     current_loss = 0.0
 
