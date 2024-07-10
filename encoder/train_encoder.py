@@ -57,10 +57,10 @@ for batch in val_loader:
 print(f"loss in val data: {loss}")
 
 # load the test
-input = np.load("./test_model/data/X_eval.npy")
+input = np.load("./test_model/data/X_eval_new.npy")
 print(input.shape)
 input = torch.tensor(input.reshape(-1, 30, 5, 5), dtype=torch.float32)
-label = torch.tensor(np.load("./test_model/data/y_eval.npy"), dtype=torch.float32)
+label = torch.tensor(np.load("./test_model/data/y_eval_new.npy"), dtype=torch.float32)
 
 # build the dataset given the unflatten images and label
 dataset = TensorDataset(input, label)
