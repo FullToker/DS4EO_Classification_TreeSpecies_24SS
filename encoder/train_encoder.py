@@ -11,10 +11,10 @@ print("You are using the following device: ", device)
 
 # load the dataset from NPY ----------------------/////////////////-------------////////
 batch_size = 64
-input = np.load("./test_model/data/X_norm.npy")
+input = np.load("./test_model/data/X_norm_augm.npy")
 print(input.shape)
 input = torch.tensor(input.reshape(-1, 30, 5, 5), dtype=torch.float32)
-label = torch.tensor(np.load("./test_model/data/y_norm.npy"), dtype=torch.float32)
+label = torch.tensor(np.load("./test_model/data/y_norm_augm.npy"), dtype=torch.float32)
 
 # build the dataset given the unflatten images and label
 dataset = TensorDataset(input, label)
