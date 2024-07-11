@@ -8,6 +8,9 @@ from torch.utils.tensorboard import SummaryWriter
 X = np.load("../dataset/X_all_outnull.npy")
 y = np.load("../dataset/y_all_outnull.npy")
 
+X = np.load("./test_model/data/X_norm_augm.npy")
+y = np.load("./test_model/data/y_norm_augm.npy")
+
 device = torch.device("mps")
 batch_size = 128
 
@@ -16,15 +19,30 @@ X = torch.tensor(X.reshape(-1, 30, 5, 5), dtype=torch.float32)
 y = torch.tensor(y, dtype=torch.float32)
 dataset = TensorDataset(X, y)
 generator = torch.Generator().manual_seed(42)
-train_set, val_set = random_split(dataset, [0.8, 0.2], generator=generator)
+train_set, val_set = random_split(dataset, [0.9, 0.1], generator=generator)
 print(f"num in trian: {len(train_set)}")
-print(f"num in val: {len(val_set)}")
+# print(f"num in val: {len(val_set)}")
 
 # build the data loader
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+# val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False)
+
+# 修正val_loader
+X = np.load("./test_model/data/X_norm.npy")
+y = np.load("./test_model/data/y_norm.npy")
+device = torch.device("mps")
+
+# transfer the array to tensor
+X = torch.tensor(X.reshape(-1, 30, 5, 5), dtype=torch.float32)
+y = torch.tensor(y, dtype=torch.float32)
+dataset = TensorDataset(X, y)
+generator = torch.Generator().manual_seed(42)
+train_set, val_set = random_split(dataset, [0.7, 0.3], generator=generator)
 val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False)
+print(f"num in val: {len(val_set)}")
 
 
+# class of cnn model
 class Simple_model(nn.Module):
     def __init__(self, input_size=30 * 5 * 5, loss_func=nn.CrossEntropyLoss(), lr=1e-3):
         super().__init__()
@@ -73,7 +91,7 @@ cnn_model = Simple_model().to(device)
 
 print("Begin to train")
 
-writer = SummaryWriter("./train4eu/runs/all_200ep_outnull")
+writer = SummaryWriter("./train4eu/runs/augm_200ep")
 for epoch in range(num_epoches):
     current_loss = 0.0
 
@@ -103,4 +121,4 @@ for epoch in range(num_epoches):
     writer.add_scalar("Validation Accuracy", 100 * correct / total, epoch)
 
 
-torch.save(cnn_model.state_dict(), "./test_model/data/cnn_eu.pth")
+torch.save(cnn_model.state_dict(), "./test_model/data/cnn_norm_augm.pth")
