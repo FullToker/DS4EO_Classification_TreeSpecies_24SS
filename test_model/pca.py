@@ -8,28 +8,31 @@ from sklearn.ensemble import RandomForestClassifier as RDF
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import matplotlib.pyplot as plt
 
-# X = np.load("./test_model/data/X_norm.npy")
-# y = np.load("./test_model/data/y_norm.npy")
+X = np.load("./test_model/data/X_norm.npy")
+y = np.load("./test_model/data/y_norm.npy")
 
-X = np.load("./test_model/data/X_norm_augm.npy")
-y = np.load("./test_model/data/y_norm_augm.npy")
+# X = np.load("./test_model/data/X_norm_augm.npy")
+# y = np.load("./test_model/data/y_norm_augm.npy")
 
 print(f"data shape: {X.shape}")
 print(f"label shape: {y.shape}")
 
-X_test = np.load("./old_test/my_patches.npy")
-y_test = np.load("./old_test/my_labels.npy")
+X_test = np.load("./test_model/data/X_eval_new.npy")
+y_test = np.load("./test_model/data/y_eval_new.npy")
 
+
+# split the dataset
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
-# pca = PCA(n_components=20)
+pca = PCA(n_components=25)
 # pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=1)
-pca = TruncatedSVD(n_components=25)
+# pca = TruncatedSVD(n_components=25)
 
 # reduce dimensions
 pca.fit(X_train)
