@@ -9,6 +9,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 
 X = np.load("./test_model/data/X_norm.npy")
 y = np.load("./test_model/data/y_norm.npy")
@@ -27,8 +29,9 @@ print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
-# pca = PCA(n_components=50)
-pca = KernelPCA(n_jobs=-1, n_components=55, kernel="rbf", gamma=2)
+# pca = PCA(n_components=25)
+# pca = KernelPCA(n_jobs=-1, n_components=55, kernel="rbf", gamma=2)
+pca = TruncatedSVD(n_components=25)
 
 # reduce dimensions
 pca.fit(X_train)
@@ -42,8 +45,8 @@ classifiers = {
     # "1KNN": KNeighborsClassifier(n_neighbors=1),
     # "3KNN": KNeighborsClassifier(n_neighbors=3),
     # "5KNN": KNeighborsClassifier(n_neighbors=5),
-    "DT": tree.DecisionTreeClassifier(),
-    "NB": GaussianNB(),
+    # "DT": tree.DecisionTreeClassifier(),
+    # "NB": GaussianNB(),
     "RF": RDF(n_estimators=100),
     "MLP": MLPClassifier(alpha=1, max_iter=1000, activation="relu"),
     # "SVM": SVC(),
@@ -70,3 +73,13 @@ for clf_name, clf in classifiers.items():
     y__[clf_name] = y_pred
     acc = np.sum(y__[clf_name] == y_test) / len(y_pred)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+    # plot the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    plt.figure(figsize=(10, 7))
+    ax = sns.heatmap(cm, annot=False, fmt="d", cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.title(f"Confusion Matrix for {clf_name}")
+    plt.show()

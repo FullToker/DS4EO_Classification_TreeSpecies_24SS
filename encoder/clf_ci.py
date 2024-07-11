@@ -10,7 +10,8 @@ from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier as RDF
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
+import seaborn as sns
 
 encoder = Encoder()
 encoder.load_state_dict(torch.load("./encoder/save/encoder.pth"))
@@ -86,3 +87,13 @@ for clf_name, clf in classifiers.items():
     y_pred = clf.predict(X_test)
     acc = accuracy_score(y_pred, y_test)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+    # plot the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    plt.figure(figsize=(10, 7))
+    ax = sns.heatmap(cm, annot=False, fmt="d", cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.title(f"Confusion Matrix for {clf_name}")
+    plt.show()
