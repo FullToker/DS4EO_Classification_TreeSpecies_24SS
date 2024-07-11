@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class Encoder(nn.Module):
-    def __init__(self, input_size=5 * 5 * 33, latent=25):
+    def __init__(self, input_size=5 * 5 * 33, latent=50):
         super().__init__()
 
         self.encoder = nn.Sequential(
@@ -11,27 +11,37 @@ class Encoder(nn.Module):
             nn.LeakyReLU(),
             nn.Conv2d(64, 32, kernel_size=3, padding=1),
             nn.LeakyReLU(),
-            nn.Conv2d(32, 16, kernel_size=3, padding=1),
-            nn.LeakyReLU(),
+            # nn.Conv2d(32, 16, kernel_size=3, padding=1),
+            # nn.LeakyReLU(),
         )
-        self.fc = nn.Linear(5 * 5 * 16, latent)
+        self.fc = nn.Sequential(
+            nn.Linear(5 * 5 * 32, 400),
+            nn.LeakyReLU(),
+            nn.Linear(400, latent),
+        )
 
     def forward(self, x):
         x = self.encoder(x)
-        # reshape = nn.Flatten()
-        # x = reshape(x)
-        # x = self.fc(x)
+        reshape = nn.Flatten()
+        x = reshape(x)
+        x = self.fc(x)
         return x
 
 
 class Decoder(nn.Module):
-    def __init__(self, output_size=5 * 5 * 33, latent=25):
+    def __init__(self, output_size=5 * 5 * 33, latent=50):
         super().__init__()
 
-        self.fc = nn.Linear(latent, 5 * 5 * 16)
-        self.decoder = nn.Sequential(
-            nn.ConvTranspose2d(16, 32, kernel_size=3, padding=1),
+        self.fc = nn.Sequential(
+            nn.Linear(latent, 400),
             nn.LeakyReLU(),
+            nn.Linear(400, 5 * 5 * 32),
+            nn.LeakyReLU(),
+        )
+
+        self.decoder = nn.Sequential(
+            # nn.ConvTranspose2d(16, 32, kernel_size=3, padding=1),
+            # nn.LeakyReLU(),
             nn.ConvTranspose2d(32, 64, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.ConvTranspose2d(64, 30, kernel_size=3, padding=1),
@@ -39,9 +49,9 @@ class Decoder(nn.Module):
         )
 
     def forward(self, x):
-        # x = self.fc(x)
-        # reshape = nn.Unflatten(1, (16, 5, 5))
-        # x = reshape(x)
+        x = self.fc(x)
+        reshape = nn.Unflatten(1, (32, 5, 5))
+        x = reshape(x)
         return self.decoder(x)
 
 

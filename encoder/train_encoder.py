@@ -23,8 +23,8 @@ train_data, val_data = random_split(
 )
 print(f"shape of train : {len(train_data)}")
 print(f"shape of test : {len(val_data)}")
-torch.save(train_data, "./encoder/save/train.pth")
-torch.save(val_data, "./encoder/save/val.pth")
+# torch.save(train_data, "./encoder/save/train.pth")
+# torch.save(val_data, "./encoder/save/val.pth")
 
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_data, batch_size=batch_size, shuffle=False)
@@ -56,6 +56,7 @@ for batch in val_loader:
     loss += func(reconstruction, images).item()
 print(f"loss in val data: {loss}")
 
+"""
 # load the test
 input = np.load("./test_model/data/X_eval_new.npy")
 print(input.shape)
@@ -65,3 +66,4 @@ label = torch.tensor(np.load("./test_model/data/y_eval_new.npy"), dtype=torch.fl
 # build the dataset given the unflatten images and label
 dataset = TensorDataset(input, label)
 torch.save(dataset, "./encoder/save/test.pth")
+"""
