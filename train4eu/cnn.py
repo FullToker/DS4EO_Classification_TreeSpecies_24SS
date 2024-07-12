@@ -52,6 +52,7 @@ class Simple_model(nn.Module):
         self.conv = nn.Sequential(
             nn.Conv2d(30, 16, kernel_size=3, padding=1),
             nn.LeakyReLU(),
+            # nn.Dropout(0.5),
             nn.Conv2d(16, 10, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
@@ -86,7 +87,7 @@ class Simple_model(nn.Module):
         return loss
 
 
-num_epoches = 200
+num_epoches = 500
 cnn_model = Simple_model().to(device)
 
 print("Begin to train")
