@@ -16,8 +16,8 @@ import umap
 X = np.load("./test_model/data/X_norm.npy")
 y = np.load("./test_model/data/y_norm.npy")
 
-# X = np.load("./test_model/data/X_norm_augm.npy")
-# y = np.load("./test_model/data/y_norm_augm.npy")
+X = np.load("./test_model/data/X_norm_augm.npy")
+y = np.load("./test_model/data/y_norm_augm.npy")
 
 print(f"data shape: {X.shape}")
 print(f"label shape: {y.shape}")
