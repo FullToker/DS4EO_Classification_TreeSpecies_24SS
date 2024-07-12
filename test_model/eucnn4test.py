@@ -40,9 +40,9 @@ class Simple_model(nn.Module):
         )
         self.flatten = nn.Flatten()
         self.fc = nn.Sequential(
-            nn.Linear(10 * 2 * 2, 20),
-            nn.ReLU(),
-            nn.Linear(20, 10),
+            nn.Linear(10 * 2 * 2, 10),
+            # nn.ReLU(),
+            # nn.Linear(20, 10),
             nn.Sigmoid(),
         )
 
@@ -71,7 +71,8 @@ class Simple_model(nn.Module):
 num_epoches = 400
 cnn_model = Simple_model()
 # load the trained data
-cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
+# cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
+cnn_model.load_state_dict(torch.load("./test_model/data/cnn_norm_augm_easy.pth"))
 cnn_model.to(device)
 
 # load the test

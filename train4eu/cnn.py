@@ -8,8 +8,8 @@ from torch.utils.tensorboard import SummaryWriter
 X = np.load("../dataset/X_all_outnull.npy")
 y = np.load("../dataset/y_all_outnull.npy")
 
-X = np.load("./test_model/data/X_norm_augm.npy")
-y = np.load("./test_model/data/y_norm_augm.npy")
+X = np.load("./test_model/data/X_norm.npy")
+y = np.load("./test_model/data/y_norm.npy")
 
 device = torch.device("mps")
 batch_size = 128
@@ -58,9 +58,9 @@ class Simple_model(nn.Module):
         )
         self.flatten = nn.Flatten()
         self.fc = nn.Sequential(
-            nn.Linear(10 * 2 * 2, 20),
-            nn.ReLU(),
-            nn.Linear(20, 10),
+            nn.Linear(10 * 2 * 2, 10),
+            # nn.ReLU(),
+            # nn.Linear(20, 10),
             nn.Sigmoid(),
         )
 
@@ -91,7 +91,7 @@ cnn_model = Simple_model().to(device)
 
 print("Begin to train")
 
-writer = SummaryWriter("./train4eu/runs/augm_200ep")
+writer = SummaryWriter("./train4eu/runs/norm_200ep")
 for epoch in range(num_epoches):
     current_loss = 0.0
 
@@ -121,4 +121,4 @@ for epoch in range(num_epoches):
     writer.add_scalar("Validation Accuracy", 100 * correct / total, epoch)
 
 
-torch.save(cnn_model.state_dict(), "./test_model/data/cnn_norm_augm.pth")
+torch.save(cnn_model.state_dict(), "./test_model/data/cnn_norm_easy.pth")
