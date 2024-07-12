@@ -52,7 +52,7 @@ class Simple_model(nn.Module):
         self.conv = nn.Sequential(
             nn.Conv2d(30, 16, kernel_size=3, padding=1),
             nn.LeakyReLU(),
-            nn.Conv2d(16, 10, kernel_size=1),
+            nn.Conv2d(16, 10, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
         )
@@ -91,7 +91,7 @@ cnn_model = Simple_model().to(device)
 
 print("Begin to train")
 
-writer = SummaryWriter("./train4eu/runs/norm_200ep")
+writer = SummaryWriter("./train4eu/runs/norm_500ep_drop")
 for epoch in range(num_epoches):
     current_loss = 0.0
 
@@ -121,4 +121,4 @@ for epoch in range(num_epoches):
     writer.add_scalar("Validation Accuracy", 100 * correct / total, epoch)
 
 
-torch.save(cnn_model.state_dict(), "./test_model/data/cnn_norm_easy.pth")
+torch.save(cnn_model.state_dict(), "./test_model/data/cnn_norm_drop.pth")
