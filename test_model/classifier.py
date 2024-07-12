@@ -30,8 +30,8 @@ print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
 # pca = PCA(n_components=25)
-# pca = KernelPCA(n_jobs=-1, n_components=55, kernel="rbf", gamma=2)
-pca = TruncatedSVD(n_components=25)
+pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=2)
+# pca = TruncatedSVD(n_components=25)
 
 # reduce dimensions
 pca.fit(X_train)
