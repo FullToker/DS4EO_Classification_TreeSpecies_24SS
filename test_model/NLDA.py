@@ -34,7 +34,7 @@ print(f"y_train : {y_train.shape}")
 # pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=1)
 # pca = TruncatedSVD(n_components=25)
 pca = TSNE(n_components=2)
-pca = SpectralEmbedding(n_components=2)
+#pca = SpectralEmbedding(n_components=2)
 
 # reduce dimensions
 # pca.fit_transform(X_train)

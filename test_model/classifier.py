@@ -32,12 +32,19 @@ print(f"y_train : {y_train.shape}")
 # pca = PCA(n_components=25)
 pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=2)
 # pca = TruncatedSVD(n_components=25)
+pca = TSNE(n_components=2)
 
 # reduce dimensions
+'''
 pca.fit(X_train)
 X_train_reduced = pca.transform(X_train)
 X_val_reduced = pca.transform(X_val)
 X_test_reduced = pca.transform(X_test)
+print(f"shape of x_test_reduced: {X_test_reduced.shape}")
+'''
+X_train_reduced = pca.fit_transform(X_train)
+X_val_reduced = pca.fit_transform(X_val)
+X_test_reduced = pca.fit_transform(X_test)
 print(f"shape of x_test_reduced: {X_test_reduced.shape}")
 
 
