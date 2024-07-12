@@ -37,7 +37,7 @@ print(f"y_train : {y_train.shape}")
 # select_func = SVC(gamma=2, C=1)
 select_func = RDF(n_estimators=100)
 # SFFS
-sfs = SFS(select_func, n_features_to_select=50, cv=5, n_jobs=-1)
+sfs = SFS(select_func, n_features_to_select=25, cv=5, n_jobs=-1)
 sfs.fit(X, y)
 print(sfs.get_support())
 np.save("./test_model/sfs_rf50.npy", sfs.get_support())
