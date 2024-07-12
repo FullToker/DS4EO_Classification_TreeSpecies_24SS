@@ -55,6 +55,7 @@ scatter = plt.scatter(
 plt.colorbar(scatter, label="Label")
 plt.xlabel("singular vectors 1")
 plt.ylabel("singular vectors 2")
+plt.show()
 
 """
 plt.subplot(1, 2, 2)
