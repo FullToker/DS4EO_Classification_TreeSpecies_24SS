@@ -11,6 +11,7 @@ from sklearn.neural_network import MLPClassifier
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
+import umap
 
 X = np.load("./test_model/data/X_norm.npy")
 y = np.load("./test_model/data/y_norm.npy")
@@ -33,18 +34,19 @@ print(f"y_train : {y_train.shape}")
 pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=2)
 # pca = TruncatedSVD(n_components=25)
 pca = TSNE(n_components=2)
+pca = umap.UMAP(n_components=2, random_state-42, n_jobs=-1)
 
 # reduce dimensions
-'''
+"""
 pca.fit(X_train)
 X_train_reduced = pca.transform(X_train)
 X_val_reduced = pca.transform(X_val)
 X_test_reduced = pca.transform(X_test)
 print(f"shape of x_test_reduced: {X_test_reduced.shape}")
-'''
+"""
 X_train_reduced = pca.fit_transform(X_train)
-X_val_reduced = pca.fit_transform(X_val)
-X_test_reduced = pca.fit_transform(X_test)
+X_val_reduced = pca.transform(X_val)
+X_test_reduced = pca.transform(X_test)
 print(f"shape of x_test_reduced: {X_test_reduced.shape}")
 
 
