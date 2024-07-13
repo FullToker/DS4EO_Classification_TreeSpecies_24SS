@@ -33,7 +33,7 @@ print(f"y_train : {y_train.shape}")
 """
 
 
-supports = np.load("./test_model/sfs_rf90.npy").reshape(-1)
+supports = np.load("./test_model/data/sfs_rf90.npy").reshape(-1)
 print(supports.shape)
 # new_X = sfs.transform(X)
 new_X = X[:, supports]
@@ -89,5 +89,5 @@ for clf_name, clf in classifiers.items():
     plt.xlabel("Predicted")
     plt.ylabel("True")
     plt.title(f"Confusion Matrix for {clf_name}")
-    plt.savefig(f"CM_{clf_name}_SFFS_RF150.png")
+    # plt.savefig(f"CM_{clf_name}_SFFS_RF150.png")
     # plt.show()
