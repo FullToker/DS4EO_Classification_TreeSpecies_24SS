@@ -67,3 +67,25 @@ for clf_name, clf in classifiers.items():
     y__[clf_name] = y_pred
     acc = np.sum(y__[clf_name] == y_val) / len(y_pred)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+
+# in test set
+y__ = dict()
+accuracy = dict()
+print("accuracy of each classifiers in Test set is:")
+for clf_name, clf in classifiers.items():
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    y__[clf_name] = y_pred
+    acc = np.sum(y__[clf_name] == y_test) / len(y_pred)
+    print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+    # plot the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    plt.figure(figsize=(10, 7))
+    ax = sns.heatmap(cm, annot=False, fmt="d", cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.title(f"Confusion Matrix for {clf_name}")
+    plt.show()
