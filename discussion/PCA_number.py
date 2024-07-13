@@ -52,11 +52,11 @@ classifiers = {
     "RF": RDF(n_estimators=100),
     "MLP": MLPClassifier(alpha=1, max_iter=1000, activation="relu"),
     # "SVM": SVC(),
-    "newSVC": SVC(gamma=2, C=1),
+    "SVM": SVC(gamma=2, C=1),
 }
 
 # using dict to save the result of the each classifier
-acc_dicts = {"DT": [], "NB": [], "RF": [], "MLP": [], "newSVC": []}
+acc_dicts = {"DT": [], "NB": [], "RF": [], "MLP": [], "SVM": []}
 numbers = [5 * i for i in range(1, 41)]
 
 for i in numbers:
