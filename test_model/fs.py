@@ -37,11 +37,23 @@ print(f"y_train : {y_train.shape}")
 # select_func = SVC(gamma=2, C=1)
 select_func = RDF(n_estimators=100)
 # SFFS
-sfs = SFS(select_func, n_features_to_select=25, cv=5, n_jobs=-1)
-sfs.fit(X, y)
-print(sfs.get_support())
-np.save("./test_model/sfs_rf50.npy", sfs.get_support())
-new_X = sfs.transform(X)
+sfs = SFS(select_func, n_features_to_select=5, cv=5, n_jobs=-1)
+
+# select 50 features from all 750 features is too slow
+# select 5 feature from each band (25 features) -> 150 features
+# and then use this as input
+supports = []
+for i in range(int(len(X[0] / 25))):
+    sfs.fit(X[:, i * 25 : i * 25 + 25], y)
+    supports.append(sfs.get_support())
+all_supports = np.vstack(supports)
+print(all_supports)
+
+# sfs.fit(X, y)
+# print(sfs.get_support())
+np.save("./test_model/sfs_rf90.npy", all_supports)
+# new_X = sfs.transform(X)
+new_X = X[all_supports]
 
 X_train, X_val, y_train, y_val = train_test_split(
     new_X, y, test_size=0.2, random_state=42
