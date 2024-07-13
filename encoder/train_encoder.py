@@ -11,10 +11,10 @@ print("You are using the following device: ", device)
 
 # load the dataset from NPY ----------------------/////////////////-------------////////
 batch_size = 64
-input = np.load("./test_model/data/X_norm_augm.npy")
+input = np.load("./test_model/data/X_norm.npy")
 print(input.shape)
 input = torch.tensor(input.reshape(-1, 30, 5, 5), dtype=torch.float32)
-label = torch.tensor(np.load("./test_model/data/y_norm_augm.npy"), dtype=torch.float32)
+label = torch.tensor(np.load("./test_model/data/y_norm.npy"), dtype=torch.float32)
 
 # build the dataset given the unflatten images and label
 dataset = TensorDataset(input, label)
@@ -33,7 +33,7 @@ encoder = Encoder().to(device)
 decoder = Decoder().to(device)
 autoencoder = AutoEncoder(encoder, decoder, batch_size).to(device)
 
-epochs = 50
+epochs = 100
 for epoch in range(epochs):
     total_loss = 0
     for batch in train_loader:
@@ -42,8 +42,8 @@ for epoch in range(epochs):
     print(f"the epoch {epoch + 1}/{epochs} loss: {total_loss}")
 
 
-encoder_path = "./encoder/save/encoder.pth"
-autoencoder_path = "./encoder/save/autoencoder.pth"
+encoder_path = "./encoder/save/encoder_norm_easy.pth"
+autoencoder_path = "./encoder/save/autoencoder_norm_easy.pth"
 torch.save(encoder.state_dict(), encoder_path)
 torch.save(autoencoder.state_dict(), autoencoder_path)
 

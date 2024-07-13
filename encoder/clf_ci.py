@@ -14,7 +14,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 import seaborn as sns
 
 encoder = Encoder()
-encoder.load_state_dict(torch.load("./encoder/save/encoder.pth"))
+encoder.load_state_dict(torch.load("./encoder/save/encoder_norm_easy.pth"))
 
 # load the dataset
 train_data = torch.load("./encoder/save/train.pth")
