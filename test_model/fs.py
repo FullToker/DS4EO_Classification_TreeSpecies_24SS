@@ -43,7 +43,9 @@ sfs = SFS(select_func, n_features_to_select=5, cv=5, n_jobs=-1)
 # select 5 feature from each band (25 features) -> 150 features
 # and then use this as input
 supports = []
-for i in range(int(len(X[0] / 25))):
+bands = int(len(X[0]) / 25)
+print(f"num of bands: {bands}")
+for i in range(bands):
     sfs.fit(X[:, i * 25 : i * 25 + 25], y)
     supports.append(sfs.get_support())
 all_supports = np.vstack(supports)
