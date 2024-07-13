@@ -37,7 +37,7 @@ supports = np.load("./test_model/sfs_rf90.npy").reshape(-1)
 print(supports.shape)
 # new_X = sfs.transform(X)
 new_X = X[:, supports]
-X_test = X[:, supports]
+X_test = X_test[:, supports]
 
 X_train, X_val, y_train, y_val = train_test_split(
     new_X, y, test_size=0.2, random_state=42
