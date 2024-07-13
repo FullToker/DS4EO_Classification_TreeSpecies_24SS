@@ -26,15 +26,24 @@ X_test = np.load("./test_model/data/X_eval_new.npy")
 y_test = np.load("./test_model/data/y_eval_new.npy")
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# --------------------------------------////////////// NEW Augmentation
+X_train = np.load("./test_model/data/X_train_norm_augm.npy")
+X_val = np.load("./test_model/data/X_val_norm_augm.npy")
+y_train = np.load("./test_model/data/y_train_norm_augm.npy")
+y_val = np.load("./test_model/data/y_val_norm_augm.npy")
+
+
 print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
 
+
 # pca to reduce dimensions
-# pca = PCA(n_components=25)
-pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=2)
+pca = PCA(n_components=25)
+# pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=2)
 # pca = TruncatedSVD(n_components=25)
-pca = TSNE(n_components=2)
-pca = umap.UMAP(n_components=5, random_state=42, n_jobs=-1)
+# pca = TSNE(n_components=2)
+# pca = umap.UMAP(n_components=5, random_state=42, n_jobs=-1)
 
 # reduce dimensions
 """
@@ -53,7 +62,7 @@ print(f"shape of x_test_reduced: {X_test_reduced.shape}")
 classifiers = {
     # "1KNN": KNeighborsClassifier(n_neighbors=1),
     # "3KNN": KNeighborsClassifier(n_neighbors=3),
-    "5KNN": KNeighborsClassifier(n_neighbors=5),
+    # "5KNN": KNeighborsClassifier(n_neighbors=5),
     "DT": tree.DecisionTreeClassifier(),
     "NB": GaussianNB(),
     "RF": RDF(n_estimators=100),
