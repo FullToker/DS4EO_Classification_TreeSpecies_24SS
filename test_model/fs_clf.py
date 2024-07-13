@@ -80,6 +80,7 @@ for clf_name, clf in classifiers.items():
     acc = np.sum(y__[clf_name] == y_test) / len(y_pred)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
 
+    """   
     # plot the confusion matrix
     cm = confusion_matrix(y_test, y_pred)
 
@@ -89,3 +90,4 @@ for clf_name, clf in classifiers.items():
     plt.ylabel("True")
     plt.title(f"Confusion Matrix for {clf_name}")
     plt.show()
+    """
