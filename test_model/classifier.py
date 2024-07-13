@@ -34,7 +34,7 @@ print(f"y_train : {y_train.shape}")
 pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=2)
 # pca = TruncatedSVD(n_components=25)
 pca = TSNE(n_components=2)
-pca = umap.UMAP(n_components=55, random_state=42, n_jobs=-1)
+pca = umap.UMAP(n_components=50, random_state=42, n_jobs=-1)
 
 # reduce dimensions
 """
@@ -91,4 +91,5 @@ for clf_name, clf in classifiers.items():
     plt.xlabel("Predicted")
     plt.ylabel("True")
     plt.title(f"Confusion Matrix for {clf_name}")
-    plt.show()
+    plt.savefig(f"./visual/CM_{clf_name}_TSNE_norm_50.png")
+    # plt.show()
