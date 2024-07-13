@@ -3,6 +3,9 @@ import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader, random_split
 from torch.utils.tensorboard import SummaryWriter
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 X = np.load("./test_model/data/X_norm.npy")
@@ -73,7 +76,7 @@ num_epoches = 400
 cnn_model = Simple_model()
 # load the trained data
 # cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
-cnn_model.load_state_dict(torch.load("./test_model/data/cnn_norm.pth"))
+cnn_model.load_state_dict(torch.load("./test_model/data/cnn_norm_easy.pth"))
 cnn_model.to(device)
 
 # load the test
@@ -93,6 +96,8 @@ cnn_model.eval()
 correct = 0
 total = 0
 
+all_labels = []
+all_preds = []
 with torch.no_grad():
     for images, labels in val_loader:
         images, labels = images.to(device), labels.to(device)
@@ -101,9 +106,23 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
+        all_labels.extend(labels.cpu().numpy())
+        all_preds.extend(predicted.cpu().numpy())
 
     print(f"Accuracy of the model on the Val Set: {100 * correct / total:.2f}%")
+cm = confusion_matrix(all_labels, all_preds)
+plt.figure(figsize=(10, 7))
+ax = sns.heatmap(cm, annot=False, fmt="d", cmap="Blues")
+plt.xlabel("Predicted")
+plt.ylabel("True")
+plt.title(f"Confusion Matrix of CNN(Validation Set)")
+# plt.savefig(f"confusion_matrix_{dataset_name}.png")
+plt.show()
 
+
+# do the test on Test set
+all_labels = []
+all_preds = []
 
 with torch.no_grad():
     for images, labels in test_loader:
@@ -113,8 +132,18 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
+        all_labels.extend(labels.cpu().numpy())
+        all_preds.extend(predicted.cpu().numpy())
 
     print(f"Accuracy of the model on the Test Set: {100 * correct / total:.2f}%")
+cm = confusion_matrix(all_labels, all_preds)
+plt.figure(figsize=(10, 7))
+ax = sns.heatmap(cm, annot=False, fmt="d", cmap="Blues")
+plt.xlabel("Predicted")
+plt.ylabel("True")
+plt.title(f"Confusion Matrix of CNN(Test Set)")
+# plt.savefig(f"confusion_matrix_{dataset_name}.png")
+plt.show()
 
 
 """
