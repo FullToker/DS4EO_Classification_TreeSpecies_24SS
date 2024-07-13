@@ -50,6 +50,7 @@ classifiers = {
     # "1KNN": KNeighborsClassifier(n_neighbors=1),
     # "3KNN": KNeighborsClassifier(n_neighbors=3),
     "5KNN": KNeighborsClassifier(n_neighbors=5),
+    "DT": tree.DecisionTreeClassifier(),
     "NB": GaussianNB(),
     "RF": RDF(n_estimators=100),
     "MLP": MLPClassifier(alpha=1, max_iter=2000, activation="relu"),
