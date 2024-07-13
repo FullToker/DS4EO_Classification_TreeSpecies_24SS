@@ -130,8 +130,9 @@ for i in range(10):
     name = label_dict[i]
     print(f"{name}: {len(X[y==i])}, {len(y[y==i])}")
 
-np.save("./test_model/data/X_norm_augm.npy", X)
-np.save("./test_model/data/y_norm_augm.npy", y)
+# np.save("./test_model/data/X_norm_augm.npy", X)
+# np.save("./test_model/data/y_norm_augm.npy", y)
+print(y)
 
 """
 x shape: (8796, 750)
