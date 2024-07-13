@@ -48,6 +48,7 @@ print(f"num of bands: {bands}")
 for i in range(bands):
     sfs.fit(X[:, i * 25 : i * 25 + 25], y)
     supports.append(sfs.get_support())
+    print(f"the band {i+1} is done!")
 all_supports = np.vstack(supports)
 print(all_supports)
 
