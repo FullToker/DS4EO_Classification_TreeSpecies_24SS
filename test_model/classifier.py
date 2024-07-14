@@ -28,11 +28,12 @@ y_test = np.load("./test_model/data/y_eval_new.npy")
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # --------------------------------------////////////// NEW Augmentation
+"""
 X_train = np.load("./test_model/data/X_train_norm_augm.npy")
 X_val = np.load("./test_model/data/X_val_norm_augm.npy")
 y_train = np.load("./test_model/data/y_train_norm_augm.npy")
 y_val = np.load("./test_model/data/y_val_norm_augm.npy")
-
+"""
 
 print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
@@ -80,6 +81,18 @@ for clf_name, clf in classifiers.items():
     y__[clf_name] = y_pred
     acc = np.sum(y__[clf_name] == y_val) / len(y_pred)
     print(f"{clf_name: >15}: {100*acc:.2f}%")
+
+    # plot the confusion matrix
+    cm = confusion_matrix(y_val, y_pred)
+
+    plt.figure(figsize=(10, 7))
+    ax = sns.heatmap(cm, annot=False, fmt="d", cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.title(f"Confusion Matrix for {clf_name}")
+    # plt.savefig(f"CM_{clf_name}_SFFS_RF150.png")
+    plt.show()
+
 
 # in test set
 y__ = dict()
