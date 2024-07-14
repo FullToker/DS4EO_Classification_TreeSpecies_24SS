@@ -87,12 +87,12 @@ class Simple_model(nn.Module):
         return loss
 
 
-num_epoches = 500
+num_epoches = 200
 cnn_model = Simple_model().to(device)
 
 print("Begin to train")
 
-writer = SummaryWriter("./train4eu/runs/norm_500ep_drop")
+writer = SummaryWriter("./train4eu/runs/norm_200ep_drop")
 for epoch in range(num_epoches):
     current_loss = 0.0
 

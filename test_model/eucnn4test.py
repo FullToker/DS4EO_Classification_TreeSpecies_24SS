@@ -37,7 +37,7 @@ class Simple_model(nn.Module):
         self.conv = nn.Sequential(
             nn.Conv2d(30, 16, kernel_size=3, padding=1),
             nn.LeakyReLU(),
-            # nn.Dropout(p=0.5),
+            nn.Dropout(p=0.5),
             nn.Conv2d(16, 10, kernel_size=3, padding=1),
             nn.LeakyReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
@@ -76,7 +76,8 @@ num_epoches = 400
 cnn_model = Simple_model()
 # load the trained data
 # cnn_model.load_state_dict(torch.load("./test_model/data/cnn_eu.pth"))
-cnn_model.load_state_dict(torch.load("./test_model/data/cnn_norm_easy.pth"))
+cnn_model.load_state_dict(torch.load("./test_model/data/cnn_norm_drop.pth"))
+
 cnn_model.to(device)
 
 # load the test
