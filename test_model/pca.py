@@ -13,9 +13,12 @@ import matplotlib.pyplot as plt
 
 X = np.load("./test_model/data/X_norm.npy")
 y = np.load("./test_model/data/y_norm.npy")
+pca = PCA(n_components=25)
+pca.fit(X)
 
-# X = np.load("./test_model/data/X_norm_augm.npy")
-# y = np.load("./test_model/data/y_norm_augm.npy")
+X = np.load("../dataset/X_all_outnull.npy")
+y = np.load("../dataset/y_all_outnull.npy")
+
 
 print(f"data shape: {X.shape}")
 print(f"label shape: {y.shape}")
@@ -30,12 +33,12 @@ print(f"X_train Shape: {X_train.shape}")
 print(f"y_train : {y_train.shape}")
 
 # pca to reduce dimensions
-pca = PCA(n_components=25)
+# pca = PCA(n_components=25)
 # pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=1)
 # pca = TruncatedSVD(n_components=25)
 
 # reduce dimensions
-pca.fit(X_train)
+# pca.fit(X_train)
 X_train_reduced = pca.transform(X_train)
 X_val_reduced = pca.transform(X_val)
 X_test_reduced = pca.transform(X_test)
@@ -52,8 +55,8 @@ scatter = plt.scatter(
     alpha=0.5,
 )
 plt.colorbar(scatter, label="Label")
-plt.xlabel("singular vectors 1")
-plt.ylabel("singular vectors 2")
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component2")
 plt.subplot(1, 2, 2)
 scatter = plt.scatter(
     X_train_reduced[:, 2],
@@ -64,8 +67,8 @@ scatter = plt.scatter(
     alpha=0.5,
 )
 plt.colorbar(scatter, label="Label")
-plt.xlabel("singular vectors 3")
-plt.ylabel("singular vectors 4")
+plt.xlabel("Principal Component 3")
+plt.ylabel("Principal Component 4")
 plt.show()
 
 # draw the testset
