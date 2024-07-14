@@ -35,7 +35,7 @@ print(f"y_train : {y_train.shape}")
 # pca = PCA(n_components=25)
 # pca = KernelPCA(n_jobs=-1, n_components=25, kernel="rbf", gamma=1)
 # pca = TruncatedSVD(n_components=25)
-pca = umap.UMAP(n_components=3, random_state=42, n_jobs=-1)
+pca = umap.UMAP(n_components=2, random_state=42, n_jobs=-1)
 # pca = SpectralEmbedding(n_components=2)
 
 # reduce dimensions
