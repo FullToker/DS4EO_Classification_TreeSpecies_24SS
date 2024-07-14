@@ -39,12 +39,12 @@ pca = umap.UMAP(n_components=3, random_state=42, n_jobs=-1)
 # pca = SpectralEmbedding(n_components=2)
 
 # reduce dimensions
-# pca.fit_transform(X_train)
+mapper = pca.fit_transform(X_train)
 X_train_reduced = pca.fit_transform(X_train)
 X_val_reduced = pca.transform(X_val)
 X_test_reduced = pca.transform(X_test)
 print(f"shape of x_test_reduced: {X_test_reduced.shape}")
-umap.plot.points(X_train_reduced)
+umap.plot.points(mapper)
 umap.plot.points(X_test_reduced)
 
 plt.figure(figsize=(10, 7))
