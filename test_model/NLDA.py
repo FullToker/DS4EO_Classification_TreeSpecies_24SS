@@ -44,7 +44,7 @@ X_train_reduced = pca.fit_transform(X_train)
 X_val_reduced = pca.transform(X_val)
 X_test_reduced = pca.transform(X_test)
 print(f"shape of x_test_reduced: {X_test_reduced.shape}")
-umap.plot.points(mapper)
+umap.plot.points(mapper, labels=y_train)
 # umap.plot.points(X_test_reduced)
 
 plt.figure(figsize=(10, 7))
