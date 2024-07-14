@@ -57,8 +57,8 @@ scatter = plt.scatter(
 plt.colorbar(scatter, label="Label")
 plt.xlabel("Embedded Space 1")
 plt.ylabel("Embedded Space 2")
-plt.savefig("./test_model/runs/TSNE_norm_3.png")
-# plt.show()
+# plt.savefig("./test_model/runs/TSNE_norm_3.png")
+plt.show()
 
 """
 plt.subplot(1, 2, 2)
