@@ -11,6 +11,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import matplotlib.pyplot as plt
 import umap
+import umap.plot
 
 X = np.load("./test_model/data/X_norm.npy")
 y = np.load("./test_model/data/y_norm.npy")
@@ -43,6 +44,8 @@ X_train_reduced = pca.fit_transform(X_train)
 X_val_reduced = pca.transform(X_val)
 X_test_reduced = pca.transform(X_test)
 print(f"shape of x_test_reduced: {X_test_reduced.shape}")
+umap.plot.points(X_train_reduced)
+umap.plot.points(X_test_reduced)
 
 plt.figure(figsize=(10, 7))
 # plt.subplot(1, 2, 1)
