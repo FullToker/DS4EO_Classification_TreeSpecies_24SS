@@ -113,5 +113,5 @@ for clf_name, clf in classifiers.items():
     plt.xlabel("Predicted")
     plt.ylabel("True")
     plt.title(f"Confusion Matrix for {clf_name}")
-    plt.savefig(f"./visual/CM_{clf_name}_TSNE_norm_50.png")
-    # plt.show()
+    # plt.savefig(f"./visual/CM_{clf_name}_TSNE_norm_50.png")
+    plt.show()
