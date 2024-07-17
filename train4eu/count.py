@@ -21,3 +21,17 @@ for i in range(10):
     num = len(X[y == i])
     name = label_dict[i]
     print(f"{name}: {num}")
+
+
+"""
+Picea abies: 21097
+Fagus sylvatica: 7085
+Pinus sylvestris: 13892
+Quercus robur: 2309
+Betula pendula: 2237
+Quercus petraea: 1493
+Fraxinus excelsior: 1478
+Acer pseudoplatanus: 2322
+Sorbus aucuparia: 72
+Carpinus betulus: 4605
+"""
