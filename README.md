@@ -4,6 +4,8 @@ The classification project accoding to the Sentinel-2 image and EU-forests datas
 # Pipeline
 1. For Machine Learning, Preprocessing -> Feature Extraction -> Classification -> Evaluation
 2. Deep Learning: Preprocessing -> Model -> results
+3. Essential Depencies: Sci-Kit Learn, PyTorch, torchvision, numpy, matplotlib, umap-learn
+4. Notice: run all scripts in the project directory, all relative files' path is based on the project directory.
 
 # "Data"
 ## Given files
